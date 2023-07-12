@@ -25,6 +25,7 @@ from ldm.models.autoencoder import VQModelInterface, IdentityFirstStage, Autoenc
 from ldm.modules.diffusionmodules.util import make_beta_schedule, extract_into_tensor, noise_like
 from ldm.models.diffusion.ddim import DDIMSampler
 
+from infobatch import *
 
 __conditioning_keys__ = {'concat': 'c_concat',
                          'crossattn': 'c_crossattn',
@@ -654,6 +655,10 @@ class LatentDiffusion(DDPM):
     def get_input(self, batch, k, return_first_stage_outputs=False, force_c_encode=False,
                   cond_key=None, return_original_cond=False, bs=None):
         x = super().get_input(batch, k)
+        ##infobatch-start##
+        print(x)
+        x,index,weight=x[:,0],x[:,1],x[:,2]
+        ##infobatch-end##
         if bs is not None:
             x = x[:bs]
         x = x.to(self.device)
@@ -1025,6 +1030,9 @@ class LatentDiffusion(DDPM):
             raise NotImplementedError()
 
         loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3])
+        ##infobatch-start##
+        print('loss_simple shape',loss_simple.shape)
+        ##infobatch-end##
         loss_dict.update({f'{prefix}/loss_simple': loss_simple.mean()})
 
         logvar_t = self.logvar[t].to(self.device)

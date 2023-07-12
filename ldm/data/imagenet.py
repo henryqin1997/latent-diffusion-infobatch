@@ -142,7 +142,7 @@ class ImageNetTrain(ImageNetBase):
         147897477120,
     ]
 
-    def __init__(self, process_images=True, data_root=None, **kwargs):
+    def __init__(self, process_images=True, data_root='/data/common/ImageNet', **kwargs):
         self.process_images = process_images
         self.data_root = data_root
         super().__init__(**kwargs)

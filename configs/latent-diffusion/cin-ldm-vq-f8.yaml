@@ -44,7 +44,7 @@ model:
         embed_dim: 4
         n_embed: 16384
 #        ckpt_path: configs/first_stage_models/vq-f8/model.yaml
-        ckpt_path:checkpoints/vq-f8/model.ckpt
+        ckpt_path: checkpoints/vq-f8/model.ckpt
         ddconfig:
           double_z: false
           z_channels: 4

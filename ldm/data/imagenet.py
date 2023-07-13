@@ -160,8 +160,8 @@ class ImageNetTrain(ImageNetBase):
         self.expected_length = 1281167
         self.random_crop = retrieve(self.config, "ImageNetTrain/random_crop",
                                     default=True)
-#         if not tdu.is_prepared(self.root):
-#             # prep
+        if not tdu.is_prepared(self.root):
+            # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
 #             datadir = self.datadir
@@ -185,14 +185,14 @@ class ImageNetTrain(ImageNetBase):
 #                     with tarfile.open(subpath, "r:") as tar:
 #                         tar.extractall(path=subdir)
 #
-#             filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
-#             filelist = [os.path.relpath(p, start=datadir) for p in filelist]
-#             filelist = sorted(filelist)
-#             filelist = "\n".join(filelist)+"\n"
-#             with open(self.txt_filelist, "w") as f:
-#                 f.write(filelist)
-#
-#             tdu.mark_prepared(self.root)
+            filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
+            filelist = [os.path.relpath(p, start=datadir) for p in filelist]
+            filelist = sorted(filelist)
+            filelist = "\n".join(filelist)+"\n"
+            with open(self.txt_filelist, "w") as f:
+                f.write(filelist)
+
+            tdu.mark_prepared(self.root)
 
 
 class ImageNetValidation(ImageNetBase):
@@ -226,7 +226,7 @@ class ImageNetValidation(ImageNetBase):
         self.expected_length = 50000
         self.random_crop = retrieve(self.config, "ImageNetValidation/random_crop",
                                     default=False)
-#         if not tdu.is_prepared(self.root):
+        if not tdu.is_prepared(self.root):
 #             # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
@@ -260,14 +260,14 @@ class ImageNetValidation(ImageNetBase):
 #                     dst = os.path.join(datadir, v)
 #                     shutil.move(src, dst)
 #
-#             filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
-#             filelist = [os.path.relpath(p, start=datadir) for p in filelist]
-#             filelist = sorted(filelist)
-#             filelist = "\n".join(filelist)+"\n"
-#             with open(self.txt_filelist, "w") as f:
-#                 f.write(filelist)
-#
-#             tdu.mark_prepared(self.root)
+            filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
+            filelist = [os.path.relpath(p, start=datadir) for p in filelist]
+            filelist = sorted(filelist)
+            filelist = "\n".join(filelist)+"\n"
+            with open(self.txt_filelist, "w") as f:
+                f.write(filelist)
+
+            tdu.mark_prepared(self.root)
 
 
 

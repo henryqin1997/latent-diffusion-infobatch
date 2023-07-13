@@ -66,20 +66,20 @@ class ImageNetBase(Dataset):
     def _prepare_synset_to_human(self):
         SIZE = 2655750
         URL = "https://heibox.uni-heidelberg.de/f/9f28e956cd304264bb82/?dl=1"
-        self.human_dict = os.path.join(self.root, "synset_human.txt")
+        self.human_dict = os.path.join(self.data_root, "synset_human.txt")
         if (not os.path.exists(self.human_dict) or
                 not os.path.getsize(self.human_dict)==SIZE):
             download(URL, self.human_dict)
 
     def _prepare_idx_to_synset(self):
         URL = "https://heibox.uni-heidelberg.de/f/d835d5b6ceda4d3aa910/?dl=1"
-        self.idx2syn = os.path.join(self.root, "index_synset.yaml")
+        self.idx2syn = os.path.join(self.data_root, "index_synset.yaml")
         if (not os.path.exists(self.idx2syn)):
             download(URL, self.idx2syn)
 
     def _prepare_human_to_integer_label(self):
         URL = "https://heibox.uni-heidelberg.de/f/2362b797d5be43b883f6/?dl=1"
-        self.human2integer = os.path.join(self.root, "imagenet1000_clsidx_to_labels.txt")
+        self.human2integer = os.path.join(self.data_root, "imagenet1000_clsidx_to_labels.txt")
         if (not os.path.exists(self.human2integer)):
             download(URL, self.human2integer)
         with open(self.human2integer, "r") as f:

@@ -164,7 +164,7 @@ class ImageNetTrain(ImageNetBase):
             # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
-#             datadir = self.datadir
+            datadir = self.datadir
 #             if not os.path.exists(datadir):
 #                 path = os.path.join(self.root, self.FILES[0])
 #                 if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:
@@ -230,7 +230,7 @@ class ImageNetValidation(ImageNetBase):
 #             # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
-#             datadir = self.datadir
+            datadir = self.datadir
 #             if not os.path.exists(datadir):
 #                 path = os.path.join(self.root, self.FILES[0])
 #                 if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:

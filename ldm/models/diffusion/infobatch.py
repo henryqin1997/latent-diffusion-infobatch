@@ -30,10 +30,10 @@ class InfoBatch(Dataset):
     def __len__(self):
         return len(self.dataset)
 
-    def copy_properties(src):
-        for attr in vars(src).keys():
-            if attr not in self:
-                setattr(self, attr, getattr(src, attr))
+    def copy_properties(self,src):
+        for attr in dir(src):
+            if attr not in dir(self):
+                setattr(self,attr,getattr(src,attr))
 
     def __getitem__(self, index):
         data = self.dataset[index]

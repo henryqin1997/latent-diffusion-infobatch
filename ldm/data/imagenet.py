@@ -160,7 +160,7 @@ class ImageNetTrain(ImageNetBase):
         self.expected_length = 1281167
         self.random_crop = retrieve(self.config, "ImageNetTrain/random_crop",
                                     default=True)
-        if not tdu.is_prepared(self.root):
+        if not tdu.is_prepared(self.data_root):
             # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
@@ -192,7 +192,7 @@ class ImageNetTrain(ImageNetBase):
             with open(self.txt_filelist, "w") as f:
                 f.write(filelist)
 
-            tdu.mark_prepared(self.root)
+            tdu.mark_prepared(self.data_root)
 
 
 class ImageNetValidation(ImageNetBase):
@@ -226,7 +226,7 @@ class ImageNetValidation(ImageNetBase):
         self.expected_length = 50000
         self.random_crop = retrieve(self.config, "ImageNetValidation/random_crop",
                                     default=False)
-        if not tdu.is_prepared(self.root):
+        if not tdu.is_prepared(self.data_root):
 #             # prep
 #             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 #
@@ -267,7 +267,7 @@ class ImageNetValidation(ImageNetBase):
             with open(self.txt_filelist, "w") as f:
                 f.write(filelist)
 
-            tdu.mark_prepared(self.root)
+            tdu.mark_prepared(self.data_root)
 
 
 

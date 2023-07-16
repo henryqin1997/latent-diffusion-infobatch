@@ -98,7 +98,7 @@ class ImageNetBase(Dataset):
             print("Removed {} files from filelist during filtering.".format(l1 - len(self.relpaths)))
 
 #         self.synsets = [p.split("/")[0] for p in self.relpaths]
-        self.synsets = [p.split("/")[-1] for p in self.relpaths]
+        self.synsets = [p.split("/")[-2] for p in self.relpaths]
 
         print(self.synsets)
         self.abspaths = [os.path.join(self.datadir, p) for p in self.relpaths]

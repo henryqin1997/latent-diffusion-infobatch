@@ -212,7 +212,7 @@ class ImageNetValidation(ImageNetBase):
         1950000,
     ]
 
-    def __init__(self, process_images=True, data_root='./datas', **kwargs):
+    def __init__(self, process_images=True, data_root='./datas/val', **kwargs):
         self.data_root = data_root
         self.process_images = process_images
         super().__init__(**kwargs)

@@ -186,7 +186,7 @@ class ImageNetTrain(ImageNetBase):
 #                         tar.extractall(path=subdir)
 #
             filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
-            filelist = [os.path.relpath(p, start=datadir) for p in filelist]
+            filelist = [os.path.relpath(p, start=self.data_root) for p in filelist]
             filelist = sorted(filelist)
             filelist = "\n".join(filelist)+"\n"
             with open(self.txt_filelist, "w") as f:
@@ -196,7 +196,7 @@ class ImageNetTrain(ImageNetBase):
 
 
 class ImageNetValidation(ImageNetBase):
-    NAME = "ImageNet/val"
+    NAME = "imagent_val"
     URL = "http://www.image-net.org/challenges/LSVRC/2012/"
     AT_HASH = "5d6d0df7ed81efd49ca99ea4737e0ae5e3a5f2e5"
     VS_URL = "https://heibox.uni-heidelberg.de/f/3e0f6e9c624e45f2bd73/?dl=1"
@@ -227,41 +227,40 @@ class ImageNetValidation(ImageNetBase):
         self.random_crop = retrieve(self.config, "ImageNetValidation/random_crop",
                                     default=False)
         if not tdu.is_prepared(self.data_root):
-#             # prep
-#             print("Preparing dataset {} in {}".format(self.NAME, self.root))
-#
+            print("Preparing dataset {} in {}".format(self.NAME, self.root))
+
             datadir = self.datadir
-#             if not os.path.exists(datadir):
-#                 path = os.path.join(self.root, self.FILES[0])
-#                 if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:
-#                     import academictorrents as at
-#                     atpath = at.get(self.AT_HASH, datastore=self.root)
-#                     assert atpath == path
-#
-#                 print("Extracting {} to {}".format(path, datadir))
-#                 os.makedirs(datadir, exist_ok=True)
-#                 with tarfile.open(path, "r:") as tar:
-#                     tar.extractall(path=datadir)
-#
-#                 vspath = os.path.join(self.root, self.FILES[1])
-#                 if not os.path.exists(vspath) or not os.path.getsize(vspath)==self.SIZES[1]:
-#                     download(self.VS_URL, vspath)
-#
-#                 with open(vspath, "r") as f:
-#                     synset_dict = f.read().splitlines()
-#                     synset_dict = dict(line.split() for line in synset_dict)
-#
-#                 print("Reorganizing into synset folders")
-#                 synsets = np.unique(list(synset_dict.values()))
-#                 for s in synsets:
-#                     os.makedirs(os.path.join(datadir, s), exist_ok=True)
-#                 for k, v in synset_dict.items():
-#                     src = os.path.join(datadir, k)
-#                     dst = os.path.join(datadir, v)
-#                     shutil.move(src, dst)
-#
+            if not os.path.exists(datadir):
+                path = os.path.join(self.root, self.FILES[0])
+                if not os.path.exists(path) or not os.path.getsize(path)==self.SIZES[0]:
+                    import academictorrents as at
+                    atpath = at.get(self.AT_HASH, datastore=self.root)
+                    assert atpath == path
+
+                print("Extracting {} to {}".format(path, datadir))
+                os.makedirs(datadir, exist_ok=True)
+                with tarfile.open(path, "r:") as tar:
+                    tar.extractall(path=datadir)
+
+                vspath = os.path.join(self.root, self.FILES[1])
+                if not os.path.exists(vspath) or not os.path.getsize(vspath)==self.SIZES[1]:
+                    download(self.VS_URL, vspath)
+
+                with open(vspath, "r") as f:
+                    synset_dict = f.read().splitlines()
+                    synset_dict = dict(line.split() for line in synset_dict)
+
+                print("Reorganizing into synset folders")
+                synsets = np.unique(list(synset_dict.values()))
+                for s in synsets:
+                    os.makedirs(os.path.join(datadir, s), exist_ok=True)
+                for k, v in synset_dict.items():
+                    src = os.path.join(datadir, k)
+                    dst = os.path.join(datadir, v)
+                    shutil.move(src, dst)
+
             filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
-            filelist = [os.path.relpath(p, start=datadir) for p in filelist]
+            filelist = [os.path.relpath(p, start=self.data_root) for p in filelist]
             filelist = sorted(filelist)
             filelist = "\n".join(filelist)+"\n"
             with open(self.txt_filelist, "w") as f:

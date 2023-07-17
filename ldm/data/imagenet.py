@@ -211,7 +211,7 @@ class ImageNetValidation(ImageNetBase):
         1950000,
     ]
 
-    def __init__(self, process_images=True, data_root='./datas/val', **kwargs):
+    def __init__(self, process_images=True, data_root='./datas', **kwargs):
         self.data_root = data_root
         self.process_images = process_images
         super().__init__(**kwargs)
@@ -229,7 +229,7 @@ class ImageNetValidation(ImageNetBase):
         self.expected_length = 50000
         self.random_crop = retrieve(self.config, "ImageNetValidation/random_crop",
                                     default=False)
-        if not tdu.is_prepared(self.data_root):
+        if not os.path.exists('./datas/valfilelist.txt'):
             print("Preparing dataset {} in {}".format(self.NAME, self.root))
 
             datadir = self.datadir

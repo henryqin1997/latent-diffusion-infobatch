@@ -262,7 +262,7 @@ class ImageNetValidation(ImageNetBase):
 #                     dst = os.path.join(datadir, v)
 #                     shutil.move(src, dst)
 
-            filelist = glob.glob(os.path.join(datadir, "**", "*.JPEG"))
+            filelist = glob.glob(os.path.join('./datas/ImageNet/val', "**", "*.JPEG"))
             filelist = [os.path.relpath(p, start='./datas') for p in filelist]
             filelist = sorted(filelist)
             filelist = "\n".join(filelist)+"\n"

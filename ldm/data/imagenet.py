@@ -100,7 +100,7 @@ class ImageNetBase(Dataset):
 #         self.synsets = [p.split("/")[0] for p in self.relpaths]
         self.synsets = [p.split("/")[-2] for p in self.relpaths]
 
-        self.abspaths = [os.path.join(self.datadir, p) for p in self.relpaths]
+        self.abspaths = [os.path.join('./datas', p) for p in self.relpaths]
 
         unique_synsets = np.unique(self.synsets)
         class_dict = dict((synset, i) for i, synset in enumerate(unique_synsets))

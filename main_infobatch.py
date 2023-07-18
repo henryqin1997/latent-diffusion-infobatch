@@ -670,7 +670,7 @@ if __name__ == "__main__":
         # lightning still takes care of proper multiprocessing though
         data.prepare_data()
         data.setup()
-        data.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
+        data.datasets['train'] = InfoBatch(data.dataset['train'], num_epoch=1000, delta = 0.825)
         print("#### Data #####")
         for k in data.datasets:
             print(f"{k}, {data.datasets[k].__class__.__name__}, {len(data.datasets[k])}")

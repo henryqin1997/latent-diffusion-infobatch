@@ -520,6 +520,7 @@ if __name__ == "__main__":
         lightning_config = config.pop("lightning", OmegaConf.create())
         # merge trainer cli with config
         trainer_config = lightning_config.get("trainer", OmegaConf.create())
+        print(trainer_config)
         # default to ddp
         trainer_config["accelerator"] = "ddp"
         for k in nondefault_trainer_args(opt):

@@ -194,7 +194,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
             for k in self.datasets:
                 print(k, 'is wrapped')
                 self.datasets[k] = WrappedDataset(self.datasets[k])
-        print(self.datasets.keys())
+        print('data setup',self.datasets.keys())
         if 'train' in self.datasets:
             self.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
 

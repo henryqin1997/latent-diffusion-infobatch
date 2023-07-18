@@ -69,7 +69,7 @@ model:
         embed_dim: 512
         key: class_label
 data:
-  target: main.DataModuleFromConfig
+  target: main_infobatch.DataModuleFromConfig
   params:
     batch_size: 64
     num_workers: 12

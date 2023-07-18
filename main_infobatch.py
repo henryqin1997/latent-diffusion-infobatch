@@ -199,7 +199,6 @@ class DataModuleFromConfig(pl.LightningDataModule):
 #             self.datasets['train'] = InfoBatch(self.datasets['train'], num_epoch=1000, delta = 0.825)
 
     def _train_dataloader(self):
-        print('_train_dataloader called')
         is_iterable_dataset = isinstance(self.datasets['train'], Txt2ImgIterableBaseDataset)
         if is_iterable_dataset or self.use_worker_init_fn:
             init_fn = worker_init_fn

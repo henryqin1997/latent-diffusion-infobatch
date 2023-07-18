@@ -195,7 +195,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
                 print(k)
                 self.datasets[k] = WrappedDataset(self.datasets[k])
         if 'train' in self.datasets:
-            self.datasets['train'] = InfoBatch(self.dataset['train'])
+            self.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
 
     def _train_dataloader(self):
         is_iterable_dataset = isinstance(self.datasets['train'], Txt2ImgIterableBaseDataset)

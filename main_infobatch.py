@@ -194,9 +194,9 @@ class DataModuleFromConfig(pl.LightningDataModule):
             for k in self.datasets:
                 print(k, 'is wrapped')
                 self.datasets[k] = WrappedDataset(self.datasets[k])
-        print('data setup',self.datasets.keys())
-        if 'train' in self.datasets:
-            self.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
+#         print('data setup',self.datasets.keys())
+#         if 'train' in self.datasets:
+#             self.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
 
     def _train_dataloader(self):
         is_iterable_dataset = isinstance(self.datasets['train'], Txt2ImgIterableBaseDataset)
@@ -670,6 +670,7 @@ if __name__ == "__main__":
         # lightning still takes care of proper multiprocessing though
         data.prepare_data()
         data.setup()
+        data.datasets['train'] = InfoBatch(self.dataset['train'], num_epoch=1000, delta = 0.825)
         print("#### Data #####")
         for k in data.datasets:
             print(f"{k}, {data.datasets[k].__class__.__name__}, {len(data.datasets[k])}")

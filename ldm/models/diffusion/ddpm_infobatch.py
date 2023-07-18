@@ -328,7 +328,9 @@ class DDPM(pl.LightningModule):
         return self.p_losses(x, t, *args, **kwargs)
 
     def get_input(self, batch, k):
+        print('batch:',batch)
         x = batch[k]
+        print('x',x)
         if len(x.shape) == 3:
             x = x[..., None]
         x = rearrange(x, 'b h w c -> b c h w')
@@ -657,7 +659,7 @@ class LatentDiffusion(DDPM):
                   cond_key=None, return_original_cond=False, bs=None):
         x = super().get_input(batch, k)
         ##infobatch-start##
-        print(x)
+#         print(x)
         x,index,weight=x[:,0],x[:,1],x[:,2]
         ##infobatch-end##
         if bs is not None:

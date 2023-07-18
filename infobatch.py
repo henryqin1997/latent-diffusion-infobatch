@@ -23,6 +23,7 @@ class InfoBatch(Dataset):
         self.weights = np.full(len(self.dataset),1.)
         self.save_num = 0
         self.copy_properties(dataset)
+        print('InfoBatch initialized')
 
     def __setscore__(self, indices, values):
         self.scores[indices] = values

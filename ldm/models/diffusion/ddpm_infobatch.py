@@ -341,8 +341,7 @@ class DDPM(pl.LightningModule):
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
-        if self.trainer.max_steps:
-            print(self.trainer.max_steps)
+        print(self.trainer)
         loss, loss_dict = self.shared_step(batch)
 
         self.log_dict(loss_dict, prog_bar=True,

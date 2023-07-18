@@ -19,7 +19,6 @@ class InfoBatch(Dataset):
         self.num_epoch = num_epoch
         self.delta = delta
         self.scores = np.full(len(self.dataset),np.Inf)
-        self.transform = dataset.transform
         self.weights = np.full(len(self.dataset),1.)
         self.save_num = 0
         self.copy_properties(dataset)

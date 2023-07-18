@@ -330,7 +330,7 @@ class DDPM(pl.LightningModule):
     def get_input(self, batch, k):
 #         print('batch:',batch)
         x = batch[k]
-#         print('x',x)
+        print('x',x)
         if len(x.shape) == 3:
             x = x[..., None]
         x = rearrange(x, 'b h w c -> b c h w')

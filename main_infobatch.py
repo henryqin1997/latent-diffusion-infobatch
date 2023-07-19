@@ -726,7 +726,7 @@ if __name__ == "__main__":
         if opt.train:
             try:
                 #trainer.fit(model,data)
-                os.environment['GLOBAL_RANK']=trainer.global_rank
+                os.environ['GLOBAL_RANK']=trainer.global_rank
                 trainer.fit(model, data.train_dataloader(),data.val_dataloader())
             except Exception:
                 melk()

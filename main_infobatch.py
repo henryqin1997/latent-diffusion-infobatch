@@ -199,7 +199,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
 #         if 'train' in self.datasets:
 #             self.datasets['train'] = InfoBatch(self.datasets['train'], num_epoch=1000, delta = 0.825)
 
-    def _train_dataloader(self):
+    def _train_dataloader(self, trainer):
         print('_train_dataloader called')
         is_iterable_dataset = isinstance(self.datasets['train'], Txt2ImgIterableBaseDataset)
         if is_iterable_dataset or self.use_worker_init_fn:
@@ -210,7 +210,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
 #                           num_workers=self.num_workers, shuffle=False if is_iterable_dataset else True,
 #                           worker_init_fn=init_fn)
             return DataLoader(self.datasets["train"], batch_size=self.batch_size, num_workers=self.num_workers, \
-                                worker_init_fn=init_fn, sampler = DistributedSamplerWrapper(self.datasets["train"].pruning_sampler()))
+                                worker_init_fn=init_fn, sampler = DistributedSamplerWrapper(self.datasets["train"].pruning_sampler(),rank=trainer.global_rank))
 
     def _val_dataloader(self, shuffle=False):
         if isinstance(self.datasets['validation'], Txt2ImgIterableBaseDataset) or self.use_worker_init_fn:
@@ -726,8 +726,7 @@ if __name__ == "__main__":
         if opt.train:
             try:
                 #trainer.fit(model,data)
-                os.environ['GLOBAL_RANK']=trainer.global_rank
-                trainer.fit(model, data.train_dataloader(),data.val_dataloader())
+                trainer.fit(model, data.train_dataloader(trainer),data.val_dataloader())
             except Exception:
                 melk()
                 raise

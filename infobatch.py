@@ -36,6 +36,7 @@ class InfoBatch(Dataset):
                 setattr(self,attr,getattr(src,attr))
 
     def __getitem__(self, index):
+        print('getting item with InfoBatch')
         data = self.dataset[index]
         weight = self.weights[index]
         if self.transform:

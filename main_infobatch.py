@@ -210,7 +210,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
 #                           num_workers=self.num_workers, shuffle=False if is_iterable_dataset else True,
 #                           worker_init_fn=init_fn)
             return DataLoader(self.datasets["train"], batch_size=self.batch_size, num_workers=self.num_workers,
-                                worker_init_fn=init_fn, sampler = self.datasets["train"].pruning_sampler())
+                                worker_init_fn=init_fn, sampler = DistributedSamplerWrapper(self.datasets["train"].pruning_sampler())
 
     def _val_dataloader(self, shuffle=False):
         if isinstance(self.datasets['validation'], Txt2ImgIterableBaseDataset) or self.use_worker_init_fn:

@@ -172,7 +172,7 @@ class DistributedSamplerWrapper(DistributedSampler):
         self,
         sampler,
         num_replicas: Optional[int] = torch.cuda.device_count(),
-        rank: Optional[int] = int(os.environ['LOCAL_RANK']),
+        rank: Optional[int] = os.environment['GLOBAL_RANK'],
         shuffle: bool = True,
     ):
         """

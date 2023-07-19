@@ -726,7 +726,10 @@ if __name__ == "__main__":
         if opt.train:
             try:
                 #trainer.fit(model,data)
-                trainer.fit(model, data.train_dataloader(trainer),data.val_dataloader())
+                train_dataloader = data.train_dataloader(trainer)
+                val_dataloader = data.val_dataloader()
+                print(data.datasets['train'][0])
+                trainer.fit(model,train_dataloader,val_dataloader)
             except Exception:
                 melk()
                 raise

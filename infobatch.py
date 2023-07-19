@@ -171,7 +171,7 @@ class DistributedSamplerWrapper(DistributedSampler):
     def __init__(
         self,
         sampler,
-        num_replicas: Optional[int] = None,
+        num_replicas: Optional[int] = torch.cuda.device_count(),
         rank: Optional[int] = None,
         shuffle: bool = True,
     ):

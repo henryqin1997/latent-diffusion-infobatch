@@ -725,7 +725,8 @@ if __name__ == "__main__":
         # run
         if opt.train:
             try:
-                trainer.fit(model, data)
+                #trainer.fit(model,data)
+                trainer.fit(model, data.train_dataloader(),data.val_dataloader())
             except Exception:
                 melk()
                 raise

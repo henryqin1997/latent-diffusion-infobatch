@@ -114,6 +114,8 @@ class DDPM(pl.LightningModule):
         if self.learn_logvar:
             self.logvar = nn.Parameter(self.logvar, requires_grad=True)
 
+    def set_infobatch_dataset(self,infobatch_dataset):
+        self.infobatch_dataset=infobatch_dataset
 
     def register_schedule(self, given_betas=None, beta_schedule="linear", timesteps=1000,
                           linear_start=1e-4, linear_end=2e-2, cosine_s=8e-3):
@@ -360,17 +362,17 @@ class DDPM(pl.LightningModule):
 
         ######InfoBatch#########
         scores = loss
-        if self.trainer.is_distributed:
-            low,high = split_index(indices)
+        if self.trainer.is_distributed and self.infobatch_dataset:
+            low,high = split_index(index)
             low,high = low.cuda(),high.cuda()
             tuple = torch.stack([low,high,scores])
             tuple_list = [self.trainer.accelerator_backend.gather(tuple)]
             tuple_all = torch.cat(tuple_list, dim=1)
             low_all, high_all, scores_all = tuple_all[0].type(torch.int), tuple_all[1].type(torch.int), tuple_all[2]
             indices_all = recombine_index(low_all,high_all)
-            trainset.__setscore__(indices_all.detach().cpu().numpy(), scores_all.detach().cpu().numpy())
+            self.infobatch_dataset.__setscore__(indices_all.detach().cpu().numpy(), scores_all.detach().cpu().numpy())
         else:
-            trainset.__setscore__(indices.detach().cpu().numpy(), scores.detach().cpu().numpy())
+            self.infobatch_dataset.__setscore__(indices.detach().cpu().numpy(), scores.detach().cpu().numpy())
 
         loss = loss * weight
         ####

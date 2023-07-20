@@ -1073,7 +1073,7 @@ class LatentDiffusion(DDPM):
         loss_vlb = (self.lvlb_weights[t] * loss_vlb)
         loss_dict.update({f'{prefix}/loss_vlb': loss_vlb.mean()})
         loss += (self.original_elbo_weight * loss_vlb)
-        loss_dict.update({f'{prefix}/loss': loss.meas()})
+        loss_dict.update({f'{prefix}/loss': loss.mean()})
 
         return loss, loss_dict
 

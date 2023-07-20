@@ -36,14 +36,13 @@ class InfoBatch(Dataset):
                 setattr(self,attr,getattr(src,attr))
 
     def __getitem__(self, index):
-        print('getting item with InfoBatch')
         data = self.dataset[index]
         weight = self.weights[index]
-        if self.transform:
-            if isinstance(data,tuple):
-                data[0] = self.transform(data[0])
-            else:
-                data = self.transform(data)
+#         if self.transform:
+#             if isinstance(data,tuple):
+#                 data[0] = self.transform(data[0])
+#             else:
+#                 data = self.transform(data)
         return data, index, weight
 
     def prune(self):

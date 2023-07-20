@@ -201,6 +201,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
 
     def _train_dataloader(self, trainer):
         print('_train_dataloader called')
+        print(f"{self.datasets['train'].__class__.__name__}, {len(data.datasets[k])}")
         is_iterable_dataset = isinstance(self.datasets['train'], Txt2ImgIterableBaseDataset)
         if is_iterable_dataset or self.use_worker_init_fn:
             init_fn = worker_init_fn

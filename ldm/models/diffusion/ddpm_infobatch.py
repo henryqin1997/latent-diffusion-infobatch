@@ -658,11 +658,12 @@ class LatentDiffusion(DDPM):
 
     @torch.no_grad()
     def get_input(self, batch, k, return_first_stage_outputs=False, force_c_encode=False,
-                  cond_key=None, return_original_cond=False, bs=None):
+                  cond_key=None, return_original_cond=False, bs=None, train=False):
         x = super().get_input(batch, k)
         ##infobatch-start##
 #         print(x)
-        x,index,weight=x[:,0],x[:,1],x[:,2]
+        if train:
+            x,index,weight=x[:,0],x[:,1],x[:,2]
         ##infobatch-end##
         if bs is not None:
             x = x[:bs]

@@ -24,7 +24,6 @@ from ldm.modules.distributions.distributions import normal_kl, DiagonalGaussianD
 from ldm.models.autoencoder import VQModelInterface, IdentityFirstStage, AutoencoderKL
 from ldm.modules.diffusionmodules.util import make_beta_schedule, extract_into_tensor, noise_like
 from ldm.models.diffusion.ddim import DDIMSampler
-from pytorch_lightning.utilities.rank_zero_utils import is_distributed
 
 from infobatch import *
 
@@ -361,7 +360,7 @@ class DDPM(pl.LightningModule):
 
         ######InfoBatch#########
         scores = loss
-        if is_distributed():
+        if self.trainer.is_distributed:
             low,high = split_index(indices)
             low,high = low.cuda(),high.cuda()
             tuple = torch.stack([low,high,scores])

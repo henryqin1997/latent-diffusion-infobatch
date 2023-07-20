@@ -24,6 +24,7 @@ from ldm.modules.distributions.distributions import normal_kl, DiagonalGaussianD
 from ldm.models.autoencoder import VQModelInterface, IdentityFirstStage, AutoencoderKL
 from ldm.modules.diffusionmodules.util import make_beta_schedule, extract_into_tensor, noise_like
 from ldm.models.diffusion.ddim import DDIMSampler
+from pytorch_lightning.utilities.rank_zero_utils import is_distributed
 
 from infobatch import *
 
@@ -358,7 +359,24 @@ class DDPM(pl.LightningModule):
             lr = self.optimizers().param_groups[0]['lr']
             self.log('lr_abs', lr, prog_bar=True, logger=True, on_step=True, on_epoch=False)
 
-        return loss
+        ######InfoBatch#########
+        scores = loss
+        if is_distributed():
+            low,high = split_index(indices)
+            low,high = low.cuda(),high.cuda()
+            tuple = torch.stack([low,high,scores])
+            tuple_list = [self.trainer.accelerator_backend.gather(tuple)]
+            tuple_all = torch.cat(tuple_list, dim=1)
+            low_all, high_all, scores_all = tuple_all[0].type(torch.int), tuple_all[1].type(torch.int), tuple_all[2]
+            indices_all = recombine_index(low_all,high_all)
+            trainset.__setscore__(indices_all.detach().cpu().numpy(), scores_all.detach().cpu().numpy())
+        else:
+            trainset.__setscore__(indices.detach().cpu().numpy(), scores.detach().cpu().numpy())
+
+        loss = loss * weight
+        ####
+
+        return loss.mean()
 
     @torch.no_grad()
     def validation_step(self, batch, batch_idx):
@@ -1018,6 +1036,7 @@ class LatentDiffusion(DDPM):
         return mean_flat(kl_prior) / np.log(2.0)
 
     def p_losses(self, x_start, cond, t, noise=None):
+        print('t',t)
         noise = default(noise, lambda: torch.randn_like(x_start))
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
         model_output = self.apply_model(x_noisy, t, cond)
@@ -1034,7 +1053,7 @@ class LatentDiffusion(DDPM):
 
         loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3])
         ##infobatch-start##
-        print('loss_simple shape',loss_simple.shape)
+#       loss simple has same shape as batch_size
         ##infobatch-end##
         loss_dict.update({f'{prefix}/loss_simple': loss_simple.mean()})
 
@@ -1045,13 +1064,17 @@ class LatentDiffusion(DDPM):
             loss_dict.update({f'{prefix}/loss_gamma': loss.mean()})
             loss_dict.update({'logvar': self.logvar.data.mean()})
 
-        loss = self.l_simple_weight * loss.mean()
+######Infobatch modification###########
+#         loss = self.l_simple_weight * loss.mean()
+        loss = self.l_simple_weight * loss
 
         loss_vlb = self.get_loss(model_output, target, mean=False).mean(dim=(1, 2, 3))
-        loss_vlb = (self.lvlb_weights[t] * loss_vlb).mean()
-        loss_dict.update({f'{prefix}/loss_vlb': loss_vlb})
+
+#         loss_vlb = (self.lvlb_weights[t] * loss_vlb).mean()
+        loss_vlb = (self.lvlb_weights[t] * loss_vlb)
+        loss_dict.update({f'{prefix}/loss_vlb': loss_vlb.mean()})
         loss += (self.original_elbo_weight * loss_vlb)
-        loss_dict.update({f'{prefix}/loss': loss})
+        loss_dict.update({f'{prefix}/loss': loss.meas()})
 
         return loss, loss_dict
 
@@ -1454,3 +1477,13 @@ class Layout2ImgDiffusion(LatentDiffusion):
         cond_img = torch.stack(bbox_imgs, dim=0)
         logs['bbox_image'] = cond_img
         return logs
+
+def split_index(t):
+    low_mask = 0b111111111111111
+    low = torch.tensor([x&low_mask for x in t])
+    high = torch.tensor([(x>>15)&low_mask for x in t])
+    return low,high
+
+def recombine_index(low,high):
+    original_tensor = torch.tensor([(high[i]<<15)+low[i] for i in range(len(low))])
+    return original_tensor

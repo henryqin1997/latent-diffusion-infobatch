@@ -345,8 +345,8 @@ class DDPM(pl.LightningModule):
         batch, index, weight = batch
         loss, loss_dict = self.shared_step(batch)
 
-        print('loss',loss)
-        print('loss_dict',loss_dict)
+#         print('loss',loss)
+#         print('loss_dict',loss_dict)
 
         self.log_dict(loss_dict, prog_bar=True,
                       logger=True, on_step=True, on_epoch=True)
@@ -500,8 +500,6 @@ class LatentDiffusion(DDPM):
     @torch.no_grad()
     def on_train_batch_start(self, batch, batch_idx, dataloader_idx):
         # only for very first batch
-        print('on_train_batch_start')
-        print(batch,batch_idx)
         if self.scale_by_std and self.current_epoch == 0 and self.global_step == 0 and batch_idx == 0 and not self.restarted_from_ckpt:
             assert self.scale_factor == 1., 'rather not use custom rescaling and std-rescaling simultaneously'
             # set rescale weight to 1./std of encodings
@@ -1035,7 +1033,7 @@ class LatentDiffusion(DDPM):
         return mean_flat(kl_prior) / np.log(2.0)
 
     def p_losses(self, x_start, cond, t, noise=None):
-        print('t',t)
+#         print('t',t)  t is tensor of size 64
         noise = default(noise, lambda: torch.randn_like(x_start))
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
         model_output = self.apply_model(x_noisy, t, cond)

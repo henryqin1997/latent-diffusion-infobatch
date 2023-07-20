@@ -327,24 +327,23 @@ class DDPM(pl.LightningModule):
         t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
         return self.p_losses(x, t, *args, **kwargs)
 
-    def get_input(self, batch, k):
+    def get_input(self, batch, k, train=False):
 #         print('batch:',batch)
         x = batch[k]
-        print('x',x)
         if len(x.shape) == 3:
             x = x[..., None]
         x = rearrange(x, 'b h w c -> b c h w')
         x = x.to(memory_format=torch.contiguous_format).float()
         return x
 
-    def shared_step(self, batch):
-        x = self.get_input(batch, self.first_stage_key)
+    def shared_step(self, batch, train=False):
+        x = self.get_input(batch, self.first_stage_key, train=train)
         loss, loss_dict = self(x)
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
         print('training_step',batch,batch_idx)
-        loss, loss_dict = self.shared_step(batch)
+        loss, loss_dict = self.shared_step(batch, train=True)
 
         self.log_dict(loss_dict, prog_bar=True,
                       logger=True, on_step=True, on_epoch=True)
@@ -487,7 +486,7 @@ class LatentDiffusion(DDPM):
             assert self.scale_factor == 1., 'rather not use custom rescaling and std-rescaling simultaneously'
             # set rescale weight to 1./std of encodings
             print("### USING STD-RESCALING ###")
-            x = super().get_input(batch, self.first_stage_key)
+            x = super().get_input(batch, self.first_stage_key, train=True)
             x = x.to(self.device)
             encoder_posterior = self.encode_first_stage(x)
             z = self.get_first_stage_encoding(encoder_posterior).detach()
@@ -659,7 +658,7 @@ class LatentDiffusion(DDPM):
     @torch.no_grad()
     def get_input(self, batch, k, return_first_stage_outputs=False, force_c_encode=False,
                   cond_key=None, return_original_cond=False, bs=None, train=False):
-        x = super().get_input(batch, k)
+        x = super().get_input(batch, k, train=train)
         ##infobatch-start##
 #         print(x)
         if train:
@@ -680,7 +679,7 @@ class LatentDiffusion(DDPM):
                 elif cond_key == 'class_label':
                     xc = batch
                 else:
-                    xc = super().get_input(batch, cond_key).to(self.device)
+                    xc = super().get_input(batch, cond_key,train=train).to(self.device)
             else:
                 xc = x
             if not self.cond_stage_trainable or force_c_encode:
@@ -874,7 +873,7 @@ class LatentDiffusion(DDPM):
             return self.first_stage_model.encode(x)
 
     def shared_step(self, batch, **kwargs):
-        x, c = self.get_input(batch, self.first_stage_key)
+        x, c = self.get_input(batch, self.first_stage_key, **kwargs)
         loss = self(x, c)
         return loss
 

@@ -676,6 +676,7 @@ if __name__ == "__main__":
         data.prepare_data()
         data.setup()
         data.datasets['train'] = InfoBatch(data.datasets['train'], num_epoch=1000, delta = 0.825)
+        print(data.datasets['train'][np.array([0,1,2])])
         print("#### Data #####")
         for k in data.datasets:
             print(f"{k}, {data.datasets[k].__class__.__name__}, {len(data.datasets[k])}")
@@ -729,7 +730,6 @@ if __name__ == "__main__":
                 #trainer.fit(model,data)
                 train_dataloader = data.train_dataloader(trainer)
                 val_dataloader = data.val_dataloader()
-                print(data.datasets['train'][np.array([0,1,2])])
                 trainer.fit(model,train_dataloaders=train_dataloader,val_dataloaders=val_dataloader)
             except Exception:
                 melk()

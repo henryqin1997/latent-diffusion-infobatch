@@ -71,8 +71,8 @@ model:
 data:
   target: main_infobatch.DataModuleFromConfig
   params:
-#    batch_size: 64
-    batch_size: 16 #for test only
+    batch_size: 64
+#    batch_size: 16 #for test only
     num_workers: 12
     wrap: false
     train:

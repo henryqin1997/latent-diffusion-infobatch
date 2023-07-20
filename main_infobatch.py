@@ -728,7 +728,7 @@ if __name__ == "__main__":
                 #trainer.fit(model,data)
                 train_dataloader = data.train_dataloader(trainer)
                 val_dataloader = data.val_dataloader()
-                print("train_loader",train_dataloader)
+#                 print("train_loader",train_dataloader)
                 trainer.fit(model,train_dataloaders=train_dataloader,val_dataloaders=val_dataloader)
             except Exception:
                 melk()

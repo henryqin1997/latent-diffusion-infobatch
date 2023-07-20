@@ -366,10 +366,13 @@ class DDPM(pl.LightningModule):
             low,high = split_index(index)
             low,high = low.cuda(),high.cuda()
             tuple = torch.stack([low,high,scores])
-            tuple_list = [self.trainer.accelerator_backend.gather(tuple)]
-            tuple_all = torch.cat(tuple_list, dim=1)
+#             tuple_list = [self.trainer.accelerator_backend.gather(tuple)]
+#             tuple_all = torch.cat(tuple_list, dim=1)
+            tuple_all = concat_all_gather(tuple,1)
             low_all, high_all, scores_all = tuple_all[0].type(torch.int), tuple_all[1].type(torch.int), tuple_all[2]
             indices_all = recombine_index(low_all,high_all)
+            print(index)
+            print(indices_all)
             self.infobatch_dataset.__setscore__(indices_all.detach().cpu().numpy(), scores_all.detach().cpu().numpy())
         else:
             self.infobatch_dataset.__setscore__(indices.detach().cpu().numpy(), scores.detach().cpu().numpy())
@@ -1486,3 +1489,14 @@ def split_index(t):
 def recombine_index(low,high):
     original_tensor = torch.tensor([(high[i]<<15)+low[i] for i in range(len(low))])
     return original_tensor
+
+@torch.no_grad()
+def concat_all_gather(tensor, dim=0):
+    """
+    Performs all_gather operation on the provided tensors.
+    *** Warning ***: torch.distributed.all_gather has no gradient.
+    """
+    tensors_gather = [torch.ones_like(tensor) for _ in range(torch.distributed.get_world_size())]
+    torch.distributed.all_gather(tensors_gather, tensor, async_op=False)
+    output = torch.cat(tensors_gather, dim=dim)
+    return output

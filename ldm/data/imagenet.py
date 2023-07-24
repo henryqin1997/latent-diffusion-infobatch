@@ -124,9 +124,9 @@ class ImageNetBase(Dataset):
 
         if self.process_images:
             self.size = retrieve(self.config, "size", default=256)
-            self.data = ImagePaths(self.abspaths,
-                                   labels=labels,
-                                   size=self.size,
+            self.data = ImagePaths(self.abspaths[:256],
+                                   labels=labels[:256],
+                                   size=self.size[:256],
                                    random_crop=self.random_crop,
                                    )
         else:

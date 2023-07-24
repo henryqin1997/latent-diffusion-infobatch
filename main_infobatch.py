@@ -356,6 +356,7 @@ class ImageLogger(Callback):
 
             is_train = pl_module.training
             if is_train:
+                batch, index, weight = batch
                 pl_module.eval()
 
             with torch.no_grad():

@@ -113,6 +113,9 @@ class InfoBatchSampler():
 
     def __next__(self):
         try:
+            ###for test only###
+            if self.seed>=1:
+                raise StopIteration
             nxt = next(self.ite)
             return nxt
         except StopIteration:

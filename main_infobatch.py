@@ -731,7 +731,7 @@ if __name__ == "__main__":
                 val_dataloader = data.val_dataloader()
                 model.set_infobatch_dataset(data.datasets['train'])
 #                 trainer.fit(model,train_dataloaders=train_dataloader,val_dataloaders=val_dataloader)
-                train.validate(model, val_dataloader=val_dataloader)
+                trainer.validate(model, val_dataloader=val_dataloader)
             except Exception:
                 melk()
                 raise

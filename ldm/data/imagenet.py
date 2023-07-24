@@ -116,22 +116,40 @@ class ImageNetBase(Dataset):
         self.human_labels = [human_dict[s] for s in self.synsets]
 
         labels = {
-            "relpath": np.array(self.relpaths[:256]),
-            "synsets": np.array(self.synsets[:256]),
-            "class_label": np.array(self.class_labels[:256]),
-            "human_label": np.array(self.human_labels[:256]),
+            "relpath": np.array(self.relpaths),
+            "synsets": np.array(self.synsets),
+            "class_label": np.array(self.class_labels),
+            "human_label": np.array(self.human_labels),
         }
 
         if self.process_images:
             self.size = retrieve(self.config, "size", default=256)
-            self.data = ImagePaths(self.abspaths[:256],
+            self.data = ImagePaths(self.abspaths,
                                    labels=labels,
-#                                    size=self.size,
-                                   size=256,
+                                   size=self.size,
                                    random_crop=self.random_crop,
                                    )
         else:
-            self.data = self.abspaths[:256]
+            self.data = self.abspaths
+
+####code for test####
+#         labels = {
+#             "relpath": np.array(self.relpaths[:256]),
+#             "synsets": np.array(self.synsets[:256]),
+#             "class_label": np.array(self.class_labels[:256]),
+#             "human_label": np.array(self.human_labels[:256]),
+#         }
+#
+#         if self.process_images:
+#             self.size = retrieve(self.config, "size", default=256)
+#             self.data = ImagePaths(self.abspaths[:256],
+#                                    labels=labels,
+# #                                    size=self.size,
+#                                    size=256,
+#                                    random_crop=self.random_crop,
+#                                    )
+#         else:
+#             self.data = self.abspaths[:256]
 
 
 class ImageNetTrain(ImageNetBase):

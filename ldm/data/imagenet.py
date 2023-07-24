@@ -127,11 +127,11 @@ class ImageNetBase(Dataset):
             self.data = ImagePaths(self.abspaths[:256],
                                    labels=labels,
 #                                    size=self.size,
-                                   size=256
+                                   size=256,
                                    random_crop=self.random_crop,
                                    )
         else:
-            self.data = self.abspaths
+            self.data = self.abspaths[:256]
 
 
 class ImageNetTrain(ImageNetBase):

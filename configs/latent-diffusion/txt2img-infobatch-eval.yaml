@@ -69,3 +69,21 @@ model:
         params:
           embed_dim: 512
           key: class_label
+
+data:
+  target: main_infobatch.DataModuleFromConfig
+  params:
+    batch_size: 16
+#    batch_size: 16 #for test only
+    num_workers: 12
+    wrap: false
+#    train:
+#      target: ldm.data.imagenet.ImageNetTrain
+#      params:
+#        config:
+#          size: 256
+    validation:
+      target: ldm.data.imagenet.ImageNetValidation
+      params:
+        config:
+          size: 256

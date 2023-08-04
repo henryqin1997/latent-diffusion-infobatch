@@ -723,10 +723,10 @@ if __name__ == "__main__":
 #                 raise
 
         try:
-                trainer.validate(model, data)
-            except Exception:
-#                 melk()
-                raise
+            trainer.validate(model, data)
+        except Exception:
+#           melk()
+            raise
 #         if not opt.no_test and not trainer.interrupted:
 #             trainer.test(model, data)
     except Exception:

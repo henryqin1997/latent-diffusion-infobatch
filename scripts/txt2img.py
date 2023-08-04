@@ -104,7 +104,7 @@ if __name__ == "__main__":
     opt = parser.parse_args()
 
 
-    config = OmegaConf.load("configs/latent-diffusion/txt2img-1p4B-eval.yaml")  # TODO: Optionally download from same location as ckpt and chnage this logic
+    config = OmegaConf.load("configs/latent-diffusion/txt2img-infobatch-eval.yaml")  # TODO: Optionally download from same location as ckpt and chnage this logic
 #     model = load_model_from_config(config, "models/ldm/text2img-large/model.ckpt")  # TODO: check path
     model = load_model_from_config(config, "logs/2023-07-25T10-50-22_cin-ldm-vq-f8-infobatch/checkpoints/last.ckpt")
 

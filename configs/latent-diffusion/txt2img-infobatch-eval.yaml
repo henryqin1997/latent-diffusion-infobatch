@@ -71,7 +71,7 @@ model:
           key: class_label
 
 data:
-  target: main_infobatch.DataModuleFromConfig
+  target: main.DataModuleFromConfig
   params:
     batch_size: 16
 #    batch_size: 16 #for test only
@@ -87,3 +87,12 @@ data:
       params:
         config:
           size: 256
+
+lightning:
+  callbacks:
+    image_logger:
+      target: main.ImageLogger
+      params:
+        batch_frequency: 5000
+        max_images: 8
+        increase_log_steps: False

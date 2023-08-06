@@ -338,6 +338,7 @@ class ImageLogger(Callback):
             Image.fromarray(grid).save(path)
 
     def log_img(self, pl_module, batch, batch_idx, split="train"):
+        print("log_img called")
         check_idx = batch_idx if self.log_on_batch_idx else pl_module.global_step
         if (self.check_frequency(check_idx) and  # batch_idx % self.batch_freq == 0
                 hasattr(pl_module, "log_images") and
@@ -348,7 +349,7 @@ class ImageLogger(Callback):
             is_train = pl_module.training
             if is_train:
                 pl_module.eval()
-
+            print("logging images")
             with torch.no_grad():
                 images = pl_module.log_images(batch, split=split, **self.log_images_kwargs)
 
@@ -360,6 +361,7 @@ class ImageLogger(Callback):
                     if self.clamp:
                         images[k] = torch.clamp(images[k], -1., 1.)
 
+            print("saving to {}/{}".format(pl_module.logger.save_dir,split))
             self.log_local(pl_module.logger.save_dir, split, images,
                            pl_module.global_step, pl_module.current_epoch, batch_idx)
 

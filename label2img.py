@@ -212,11 +212,12 @@ if __name__ == "__main__":
     with torch.no_grad():
         with model.ema_scope():
             for batch in data._val_dataloader():
-                print(batch)
+#                 print(batch)
                 prompt = batch['class_label']
+                print(prompt)
                 uc = None
-                if opt.scale != 1.0:
-                    uc = model.get_learned_conditioning(opt.n_samples * [""])
+#                 if opt.scale != 1.0:
+#                     uc = model.get_learned_conditioning(opt.n_samples * [""])
                 for n in trange(opt.n_iter, desc="Sampling"):
                     c = model.get_learned_conditioning(opt.n_samples * [prompt])
                     shape = [4, opt.H//8, opt.W//8]

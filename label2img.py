@@ -213,13 +213,13 @@ if __name__ == "__main__":
         with model.ema_scope():
             for batch in data._val_dataloader():
 #                 print(batch)
-                prompt = batch['class_label']
-                print(prompt)
+                labels = batch['class_label']
+                print(labels)
                 uc = None
 #                 if opt.scale != 1.0:
 #                     uc = model.get_learned_conditioning(opt.n_samples * [""])
                 for n in trange(opt.n_iter, desc="Sampling"):
-                    c = model.get_learned_conditioning(opt.n_samples * [prompt])
+                    c = model.get_learned_conditioning(labels)
                     shape = [4, opt.H//8, opt.W//8]
                     samples_ddim, _ = sampler.sample(S=opt.ddim_steps,
                                                      conditioning=c,

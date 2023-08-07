@@ -212,6 +212,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         with model.ema_scope():
             for batch in data._val_dataloader():
+                print(batch)
                 prompt = batch['class_label']
                 uc = None
                 if opt.scale != 1.0:

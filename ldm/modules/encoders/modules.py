@@ -25,6 +25,7 @@ class ClassEmbedder(nn.Module):
         self.embedding = nn.Embedding(n_classes, embed_dim)
 
     def forward(self, batch, key=None):
+        print(batch)
         if key is None:
             key = self.key
         # this is for use in crossattn

@@ -213,7 +213,7 @@ if __name__ == "__main__":
         with model.ema_scope():
             for batch in data._val_dataloader():
 #                 print(batch)
-                labels = batch['class_label']
+                labels = batch['class_label'].to(device)
                 print(labels)
                 uc = None
 #                 if opt.scale != 1.0:

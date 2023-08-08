@@ -169,7 +169,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--n_samples",
         type=int,
-        default=1,
+        default=16,
         help="how many samples to produce for the given prompt",
     )
 

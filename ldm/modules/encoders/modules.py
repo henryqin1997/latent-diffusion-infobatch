@@ -32,14 +32,28 @@ class ClassEmbedder(nn.Module):
         c = self.embedding(c)
         return c
 
+class ClassEmbedder_generation(nn.Module):
+    def __init__(self, embed_dim, n_classes=1000, key='class'):
+        super().__init__()
+        self.key = key
+        self.embedding = nn.Embedding(n_classes, embed_dim)
+
 #     def forward(self, batch, key=None):
-#         '''for validation only'''
 #         if key is None:
 #             key = self.key
 #         # this is for use in crossattn
-# #         c = batch[key][:, None]
-#         c = self.embedding(batch)
+#         c = batch[key][:, None]
+#         c = self.embedding(c)
 #         return c
+
+    def forward(self, batch, key=None):
+        '''for validation only'''
+        if key is None:
+            key = self.key
+        # this is for use in crossattn
+#         c = batch[key][:, None]
+        c = self.embedding(batch)
+        return c
 
 
 class TransformerEmbedder(AbstractEncoder):

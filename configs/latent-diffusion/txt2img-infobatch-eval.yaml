@@ -66,7 +66,7 @@ model:
           target: torch.nn.Identity
 
     cond_stage_config:
-      target: ldm.modules.encoders.modules.ClassEmbedder
+      target: ldm.modules.encoders.modules.ClassEmbedder_generation
       params:
         embed_dim: 512
         key: class_label

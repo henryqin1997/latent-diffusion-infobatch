@@ -235,7 +235,7 @@ if __name__ == "__main__":
 
                     for x_sample in x_samples_ddim:
                         x_sample = 255. * rearrange(x_sample.cpu().numpy(), 'c h w -> h w c')
-                        Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:04}.png"))
+                        Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:05}.png"))
                         base_count += 1
                     all_samples.append(x_samples_ddim)
 

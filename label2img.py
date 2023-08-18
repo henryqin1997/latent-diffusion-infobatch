@@ -232,10 +232,11 @@ if __name__ == "__main__":
                                                      eta=opt.ddim_eta)
 
                     x_samples_ddim = model.decode_first_stage(samples_ddim)
-                    print(max(x_samples_ddim),min(x_samples_ddim))
+
 #                     x_samples_ddim = torch.clamp((x_samples_ddim+1.0)/2.0, min=0.0, max=1.0)
 
                     for x_sample in x_samples_ddim:
+                        print(x_sample)
                         print(x_sample.shape)
                         x_sample = 255. * rearrange(x_sample.cpu().numpy(), 'c h w -> h w c')
                         Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:05}.png"))

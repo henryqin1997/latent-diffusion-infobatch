@@ -238,16 +238,16 @@ if __name__ == "__main__":
                         x_sample = 255. * rearrange(x_sample.cpu().numpy(), 'c h w -> h w c')
                         Image.fromarray(x_sample.astype(np.uint8)).save(os.path.join(sample_path, f"{base_count:05}.png"))
                         base_count += 1
-                    all_samples.append(x_samples_ddim)
+#                     all_samples.append(x_samples_ddim)
 
 
     # additionally, save as grid
-    grid = torch.stack(all_samples, 0)
-    grid = rearrange(grid, 'n b c h w -> (n b) c h w')
-    grid = make_grid(grid, nrow=opt.n_samples)
-
-    # to image
-    grid = 255. * rearrange(grid, 'c h w -> h w c').cpu().numpy()
-    Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f'{prompt.replace(" ", "-")}.png'))
-
-    print(f"Your samples are ready and waiting four you here: \n{outpath} \nEnjoy.")
+#     grid = torch.stack(all_samples, 0)
+#     grid = rearrange(grid, 'n b c h w -> (n b) c h w')
+#     grid = make_grid(grid, nrow=opt.n_samples)
+#
+#     # to image
+#     grid = 255. * rearrange(grid, 'c h w -> h w c').cpu().numpy()
+#     Image.fromarray(grid.astype(np.uint8)).save(os.path.join(outpath, f'{prompt.replace(" ", "-")}.png'))
+#
+#     print(f"Your samples are ready and waiting four you here: \n{outpath} \nEnjoy.")

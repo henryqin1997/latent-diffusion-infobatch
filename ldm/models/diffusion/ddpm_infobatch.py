@@ -1049,7 +1049,9 @@ class LatentDiffusion(DDPM):
         else:
             raise NotImplementedError()
 
-        loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3])
+        loss_simple = self.get_loss(model_output, target, mean=False)
+        print(loss_simple.shape)
+        loss_simple = loss_simple.mean([1, 2, 3])
         ##infobatch-start##
 #       loss simple has same shape as batch_size
         ##infobatch-end##

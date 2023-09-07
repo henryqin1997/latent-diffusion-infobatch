@@ -13,7 +13,7 @@ from operator import itemgetter
 from typing import Iterator, List, Optional, Union
 
 class InfoBatch(Dataset):
-    def __init__(self, dataset, ratio = 0.5, num_epoch=None, delta = None):
+    def __init__(self, dataset, ratio = 0.5, num_epoch=300, delta = 0.7):
         self.dataset = dataset
         self.ratio = ratio
         self.num_epoch = num_epoch
@@ -58,7 +58,7 @@ class InfoBatch(Dataset):
         self.reset_weights()
         if len(selected)>0:
             print('Entered rescaling')
-            self.weights[selected]=1./self.ratio
+#             self.weights[selected]=1./self.ratio
             pruned_samples.extend(selected)
             print(str(sum(self.weights>1))+'samples are rescaled')
         print('Cut {} samples for next iteration'.format(len(self.dataset)-len(pruned_samples)))

@@ -1,3 +1,23 @@
+# InfoBatch Adaption On Diffusion Models
+The adaption is mainly on corresponding datasets and loaders.
+
+```
+python3 main_infobatch.py --base configs/latent-diffusion/ffhq-ldm-vq-4-infobatch.yaml -t --gpus 0,1,2,3,4,5,6,7,8
+# the training has automatic validation. if not, try following code
+# python3 main_infobatch_eval.py --base configs/latent-diffusion/txt2img-infobatch-eval.yaml --resume <path/to/checkpoint> --gpus 0,1,2,3,4,5,6,7,8
+
+```
+
+Note that in our reported experiment, ffhq-ldm-vq-4-infobatch.yaml uses half of the original batch size and half of the base_learning_rate (in this repo the config is as original).
+
+For fid compute, generate images and compare with the original dataset:
+```
+python3 unconditional_generation.py
+pip install pytorch-fid
+python3 -m pytorch_fid path/to/generated_data path/to/original_val
+```
+
+------------------------
 # Latent Diffusion Models
 [arXiv](https://arxiv.org/abs/2112.10752) | [BibTeX](#bibtex)
 

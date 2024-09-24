@@ -1,5 +1,5 @@
 # InfoBatch Adaption On Diffusion Models
-The adaption is mainly on corresponding datasets and loaders.
+The adaption is mainly on corresponding datasets, loaders and configs. The forward step during training is changed in ldm/models/diffusion/ddpm_infobatch.py.
 
 ```
 python3 main_infobatch.py --base configs/latent-diffusion/ffhq-ldm-vq-4-infobatch.yaml -t --gpus 0,1,2,3,4,5,6,7,8

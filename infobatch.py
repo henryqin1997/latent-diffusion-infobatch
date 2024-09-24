@@ -13,7 +13,7 @@ from operator import itemgetter
 from typing import Iterator, List, Optional, Union
 
 class InfoBatch(Dataset):
-    def __init__(self, dataset, ratio = 0.5, num_epoch=450, delta = 0.875):
+    def __init__(self, dataset, ratio = 0.5, num_epoch=1000, delta = 0.825):
         self.dataset = dataset
         self.ratio = ratio
         self.num_epoch = num_epoch
